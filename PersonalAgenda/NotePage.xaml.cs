@@ -31,5 +31,20 @@ namespace PersonalAgenda
             await App.Database.DeleteNoteAsync(note);
             await Navigation.PopAsync();
         }
+
+        async void OnChooseButtonClicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new ActivityPage((Agenda)this.BindingContext)
+            {
+                BindingContext = new Activity()
+            });
+        }
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+            var note = (Agenda)BindingContext;
+            listView.ItemsSource = await App.Database.GetNoteActivitiesAsync(note.ID);
+        }
     }
 }
